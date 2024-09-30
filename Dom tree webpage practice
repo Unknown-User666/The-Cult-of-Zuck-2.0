@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 FINAL//EN">
+<html>
+    <head>
+        <title>The Big Company's Big Home Page</title>
+    </head>
+        <body>
+            <h1 Align="CENTER">Big Company Inc.</h1>
+            <HR>
+                <IMG SRC="logo.gif" ALIGN="LEFT">
+                    <p>Welcome to Big Company Inc.--your best source for widgets and cogs. We do widgets right!</p>
+                    <BR><BR>
+                        <UL>
+                            <li><a href="new.htm">What's New</a>
+                            <li><a href="services.htm">Products</a></li>
+                            <li><a href="contact.htm">contact</a></li>
+                        </UL>
+            <HR>
+                <address>webmaster@bigcompany.com</address>
+        </body>
+</html>
