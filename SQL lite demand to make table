@@ -1,0 +1,14 @@
+-- Create a new SQLite database
+CREATE TABLE employees (
+    id INTEGER PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    num_dependents INTEGER NOT NULL,
+    hours_worked REAL NOT NULL
+);
+
+CREATE TABLE hourly_rates (
+    employee_id INTEGER PRIMARY KEY,
+    hourly_rate REAL NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employees (id)
+);
