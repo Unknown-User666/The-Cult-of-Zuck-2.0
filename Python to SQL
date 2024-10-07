@@ -1,0 +1,60 @@
+import sqlite3
+
+conn = sqlite3.connect('employees.db')
+cursor = conn.cursor()
+
+cursor.executescript('''
+CREATE TABLE IF NOT EXISTS employees (
+    id INTEGER PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    num_dependents INTEGER NOT NULL,
+    hours_worked REAL NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS hourly_rates (
+    employee_id INTEGER PRIMARY KEY,
+    hourly_rate REAL NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employees (id)
+);
+''')
+
+def add_employee(emp_id, first_name, last_name, num_dependents, hours_worked, hourly_rate=None):
+    cursor.execute('''
+    INSERT INTO employees (id, first_name, last_name, num_dependents, hours_worked)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (emp_id, first_name, last_name, num_dependents, hours_worked))
+    
+    if hourly_rate is not None:
+        cursor.execute('''
+        INSERT INTO hourly_rates (employee_id, hourly_rate)
+        VALUES (?, ?)
+        ''', (emp_id, hourly_rate))
+    
+    conn.commit()
+    print(f'Employee {first_name} {last_name} added successfully!')
+
+def calculate_earnings(emp_id):
+    cursor.execute('''
+    SELECT e.first_name, e.last_name, e.hours_worked, r.hourly_rate
+    FROM employees e
+    JOIN hourly_rates r ON e.id = r.employee_id
+    WHERE e.id = ?
+    ''', (emp_id,))
+    
+    result = cursor.fetchone()
+    if result:
+        first_name, last_name, hours_worked, hourly_rate = result
+        total_earnings = hours_worked * hourly_rate
+        print(f'Total earnings for {first_name} {last_name}: ${total_earnings:.2f}')
+    else:
+        print('Employee not found or hourly rate not set.')
+
+if __name__ == "__main__":
+    add_employee(1, 'John', 'Doe', 2, 40, 25.00)
+    add_employee(2, 'Jane', 'Smith', 1, 35, 30.00)
+
+    calculate_earnings(1)
+    calculate_earnings(2)
+
+conn.close()
